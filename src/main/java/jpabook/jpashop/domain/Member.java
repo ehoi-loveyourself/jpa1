@@ -21,6 +21,6 @@ public class Member {
     @Embedded
     private Address address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "member") // 읽기 전용이라는 뜻, 나는 Order 엔티티에 있는 member 필드로 엮인 애라는 뜻?!
     private List<Order> orders = new ArrayList<>();
 }
