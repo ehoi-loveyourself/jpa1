@@ -10,7 +10,8 @@ import java.util.List;
 
 @Setter
 @Getter
-// SINGLE_TABLE 해ㅑ해
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "dtype")
 @Entity
 public abstract class Item {
 
