@@ -4,10 +4,12 @@ import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true) // 2개의 Public 메서드가 읽기 연산이므로 클래스 레벨에 readOnly = true 지정
 @Service
 public class MemberService {
 
@@ -16,6 +18,7 @@ public class MemberService {
     /**
      * 회원가입
      */
+    @Transactional // 쓰기 연산이므로 여기에는 readOnly = false 가 default 인 @Transactional 지정
     public Long join(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
