@@ -2,13 +2,14 @@ package jpabook.jpashop.domain.items;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.domain.Category;
+import jpabook.jpashop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
+//@Setter
 @Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
@@ -28,4 +29,23 @@ public abstract class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+
+    //==비즈니스 로직==
+
+    /**
+     * 재고 수량 증가 로직
+     * @param quantity
+     */
+    public void addStockQuantity(int quantity) {
+        this.stockQuantity += quantity;
+    }
+
+    public void decreaseStockQuantity(int quantity) {
+        int remain = this.stockQuantity - quantity;
+        if (remain < 0) {
+            throw new NotEnoughStockException("Stock Quantity should not be minus");
+        }
+
+        this.stockQuantity = remain;
+    }
 }
