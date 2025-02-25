@@ -79,15 +79,15 @@ public class Order {
 
     /* 전체 주문 가격 조회 */
     public int getTotalPrice() {
-//        int totalPrice = 0;
-//        for (OrderItem orderItem : orderItems) {
-//            totalPrice += orderItem.getTotalPrice();
-//        }
-//
-//        return totalPrice;
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
 
-        return orderItems.stream()
-                .mapToInt(OrderItem::getOrderPrice)
-                .sum();
+        return totalPrice;
+
+//        return orderItems.stream()
+//                .mapToInt(OrderItem::getOrderPrice)
+//                .sum();
     }
 }
