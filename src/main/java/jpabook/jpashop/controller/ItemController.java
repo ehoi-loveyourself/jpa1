@@ -1,21 +1,23 @@
 package jpabook.jpashop.controller;
 
 import jpabook.jpashop.domain.items.Book;
+import jpabook.jpashop.domain.items.Item;
+import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.service.ItemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/items")
 public class ItemController {
 
     private final ItemService itemService;
+    private final ItemRepository itemRepository;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, ItemRepository itemRepository) {
         this.itemService = itemService;
+        this.itemRepository = itemRepository;
     }
 
     @GetMapping("/new")
@@ -37,5 +39,37 @@ public class ItemController {
     public String itemList(Model model) {
         model.addAttribute("items", itemService.findAll());
         return "items/itemsList";
+    }
+
+    @GetMapping("/{itemId}/edit")
+    public String updateItemForm(@PathVariable Long itemId, Model model) {
+        Book findItem = (Book) itemRepository.findOne(itemId);
+
+        // 엔티티를 직접 옮기는 것이 아니라 dto를 생성해서 넘기기
+        BookForm form = new BookForm();
+        form.setName(findItem.getName());
+        form.setPrice(findItem.getPrice());
+        form.setStockQuantity(findItem.getStockQuantity());
+        form.setAuthor(findItem.getAuthor());
+        form.setIsbn(findItem.getIsbn());
+
+        model.addAttribute("form", form);
+
+        return "items/updateItemForm";
+    }
+
+    @PostMapping("/{itemId}/edit")
+    public String updateItem(@ModelAttribute("form") BookForm form) {
+        // form에 받아온 값을 Book 엔티티를 새로 생성하여 세팅
+        Book book = new Book();
+        book.setId(form.getId());
+        book.setName(form.getName());
+        book.setPrice(form.getPrice());
+        book.setStockQuantity(form.getStockQuantity());
+        book.setAuthor(form.getAuthor());
+        book.setIsbn(form.getIsbn());
+
+        itemService.saveItem(book);
+        return "redirect:/items";
     }
 }
