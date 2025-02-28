@@ -40,7 +40,6 @@ public abstract class Item {
     }
 
     //==비즈니스 로직==
-
     /**
      * 재고 수량 증가 로직
      * @param quantity
@@ -56,5 +55,11 @@ public abstract class Item {
         }
 
         this.stockQuantity = remain;
+    }
+
+    public void changeValue(String name, int price, int stockQuantity) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
     }
 }

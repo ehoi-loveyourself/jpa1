@@ -23,6 +23,8 @@ public class ItemRepository {
             em.persist(item);
         } else { // 수정
             em.merge(item); // merge에 대해 뒤에서 설명
+            // merge는 item의 전체 값을 다 바꿔버리기 때문에 특정 값만 바꿀 수 없음
+            // 마치 put 같은 아이임 그래서 바꾸고 싶지 않은 값까지 바뀌어서 null이 될 수도 있음
         }
     }
 
