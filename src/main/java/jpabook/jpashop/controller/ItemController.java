@@ -61,6 +61,7 @@ public class ItemController {
     @PostMapping("/{itemId}/edit")
     public String updateItem(@PathVariable Long itemId, BookForm form) {
         itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
+
         return "redirect:/items";
     }
 }
